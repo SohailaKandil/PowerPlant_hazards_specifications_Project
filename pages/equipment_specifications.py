@@ -26,6 +26,7 @@ if not all(
     st.error("Session state mismatch. Please go back and reselect equipment.")
     st.stop()
 data_selections = []
+data_selections_desc = []
 
 for j , equipment in enumerate(st.session_state["equipment"]):
     try:
@@ -62,12 +63,17 @@ for j , equipment in enumerate(st.session_state["equipment"]):
 
         # Get sub-options (assuming they are linked by 'Parent' column)
         sub_opts = data_page[data_page["Data Reqired"] == selected_req_sym]["Column1"].unique()
-        selected_sub_req = st.selectbox(f"Select sub data requirement #{i+1}:", sub_opts , key=f"sub_req_{i}{j}")
-        sub_opts_sym = data_page[data_page["Column1"] == selected_sub_req]["Column2"].iloc[0]
+        selected_sub_req = st.multiselect(f"Select sub data requirement #{i+1}:", sub_opts , key=f"sub_req_{i}{j}")
+        sub_opts_syms = data_page[data_page["Column1"].isin(selected_sub_req)]["Column2"].tolist()
 
-        selection = str(st.session_state["biss_line"][j])+"-"+str(st.session_state["pp_type"][j])+"-"+str(st.session_state["equipment_sym"][j])+"-"+str(selected_req_sym)+"-"+str(sub_opts_sym)
-        data_selections.append(selection)
+        for op_idx , sub_opts_sym in enumerate(sub_opts_syms):
+            selection_symbol = str(st.session_state["biss_line"][j])+"-"+str(st.session_state["pp_type"][j])+"-"+str(st.session_state["equipment_sym"][j])+"-"+str(selected_req_sym)+"-"+str(sub_opts_sym)
+            selection_describtion = str(st.session_state["biss_line_desc"][j])+"-"+str(st.session_state["pp_type_desc"][j])+"-"+str(equipment)+"-"+str(selected_req)+"-"+str(selected_sub_req[op_idx])
+
+            data_selections.append(selection_symbol)
+            data_selections_desc.append(selection_describtion)
 
 if st.button("Finish"):
     st.session_state["selected_data"] = data_selections
+    st.session_state["selected_data_desc"] = data_selections_desc
     st.switch_page("pages/save_reqs.py")

@@ -35,6 +35,9 @@ if uploaded_file is not None:
     sel_equipments = []
     equ_syms = []
 
+    biss_lines_desc = []
+    pp_types_desc = []
+
     for i in range(int(num_data)):
         st.markdown(f"#### equipment {i+1}")
         ## select the buisiness lines
@@ -42,12 +45,14 @@ if uploaded_file is not None:
         selected_biss_line = st.selectbox("Select Business Lines:", biss_lines , key=f"biss_{i+1}")
         selected_biss_line_sym = data[data["Description"] == selected_biss_line]["symbol"].iloc[0]
         biss_lines_sym.append(selected_biss_line_sym)
+        biss_lines_desc.append(selected_biss_line)
 
         ## select the power plant type
         pp_types = get_pp_type(data)
         selected_pp_type = st.selectbox("Select powerplant type:", pp_types , key=f"pp_{i+1}")
         selected_pp_type_sym = data[data["Description"] == selected_pp_type]["symbol"].iloc[0]
         pp_types_sym.append(selected_pp_type_sym)
+        pp_types_desc.append(selected_pp_type)
 
         ## select the equipment
         equipments = get_equipment(data)
@@ -61,6 +66,10 @@ if uploaded_file is not None:
         st.session_state["pp_type"] = pp_types_sym
         st.session_state["equipment_sym"] = equ_syms
         st.session_state["equipment"] = sel_equipments
+
+        st.session_state["biss_line_desc"] = biss_lines_desc
+        st.session_state["pp_type_desc"] = pp_types_desc
+        
         st.session_state["data"] = uploaded_file
         st.switch_page("pages/equipment_specifications.py")
         
