@@ -68,7 +68,7 @@ for j , equipment in enumerate(st.session_state["equipment"]):
 
         for op_idx , sub_opts_sym in enumerate(sub_opts_syms):
             selection_symbol = str(st.session_state["biss_line"][j])+"-"+str(st.session_state["pp_type"][j])+"-"+str(st.session_state["equipment_sym"][j])+"-"+str(selected_req_sym)+"-"+str(sub_opts_sym)
-            selection_describtion = str(st.session_state["biss_line_desc"][j])+"-"+str(st.session_state["pp_type_desc"][j])+"-"+str(equipment)+"-"+str(selected_req)+"-"+str(selected_sub_req[op_idx])
+            selection_describtion = str(selected_sub_req[op_idx])
 
             data_selections.append(selection_symbol)
             data_selections_desc.append(selection_describtion)
