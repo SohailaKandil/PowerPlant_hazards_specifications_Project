@@ -3,8 +3,10 @@ import pandas as pd
 from openpyxl import load_workbook
 from io import BytesIO
 
-uploaded_file = st.file_uploader("Upload Excel File", type=["xlsx"], label_visibility="collapsed")
-
+try:
+    uploaded_file = st.file_uploader("Upload Excel File", type=["xlsx"], label_visibility="collapsed")
+except:
+    st.warning("⚠️ There was an error uploading your file please try again later")
 if uploaded_file and "selected_data" in st.session_state:
     try:
         # Load the workbook from uploaded file
